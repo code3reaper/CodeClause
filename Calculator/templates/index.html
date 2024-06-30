@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .calculator {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+        .display {
+            background-color: #222;
+            color: #fff;
+            font-size: 2em;
+            padding: 20px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            text-align: right;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+        }
+        .button {
+            padding: 20px;
+            font-size: 1.5em;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+        .button:hover {
+            background-color: #eee;
+        }
+        .button.operator {
+            background-color: #ff9500;
+            color: #fff;
+        }
+        .button.operator:hover {
+            background-color: #e68a00;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="display" id="display">0</div>
+        <div class="buttons">
+            <div class="button" onclick="appendNumber('7')">7</div>
+            <div class="button" onclick="appendNumber('8')">8</div>
+            <div class="button" onclick="appendNumber('9')">9</div>
+            <div class="button operator" onclick="appendOperator('/')">/</div>
+
+            <div class="button" onclick="appendNumber('4')">4</div>
+            <div class="button" onclick="appendNumber('5')">5</div>
+            <div class="button" onclick="appendNumber('6')">6</div>
+            <div class="button operator" onclick="appendOperator('*')">*</div>
+
+            <div class="button" onclick="appendNumber('1')">1</div>
+            <div class="button" onclick="appendNumber('2')">2</div>
+            <div class="button" onclick="appendNumber('3')">3</div>
+            <div class="button operator" onclick="appendOperator('-')">-</div>
+
+            <div class="button" onclick="appendNumber('0')">0</div>
+            <div class="button" onclick="appendDot()">.</div>
+            <div class="button" onclick="clearDisplay()">C</div>
+            <div class="button operator" onclick="appendOperator('+')">+</div>
+
+            <div class="button operator" style="grid-column: span 4;" onclick="calculate()">=</div>
+        </div>
+    </div>
+
+    <script>
+        let display = document.getElementById('display');
+        let expression = '';
+
+        function appendNumber(number) {
+            if (expression === '0' && number === '0') return;
+            if (expression === '0' && number !== '.') {
+                expression = number;
+            } else {
+                expression += number;
+            }
+            display.innerText = expression;
+        }
+
+        function appendOperator(operator) {
+            expression += ' ' + operator + ' ';
+            display.innerText = expression;
+        }
+
+        function appendDot() {
+            if (!expression.includes('.')) {
+                expression += '.';
+            }
+            display.innerText = expression;
+        }
+
+        function clearDisplay() {
+            expression = '';
+            display.innerText = '0';
+        }
+
+        function calculate() {
+            fetch('/calculate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `expression=${encodeURIComponent(expression)}`,
+            })
+            .then(response => response.json())
+            .then(data => {
+                display.innerText = data.result;
+                expression = data.result;
+            })
+            .catch(error => {
+                display.innerText = 'Error';
+                expression = '';
+            });
+        }
+    </script>
+</body>
+</html>
