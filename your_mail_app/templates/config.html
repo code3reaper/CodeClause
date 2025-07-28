@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mail App Configuration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md">
+        <h1 class="text-4xl font-extrabold text-center text-gray-900 mb-6">Configure Your Mail</h1>
+        <p class="text-center text-gray-600 mb-8">Enter your email provider details to get started.</p>
+
+        {% if error %}
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <strong class="font-bold">Error!</strong>
+                <span class="block sm:inline">{{ error }}</span>
+            </div>
+        {% endif %}
+
+        <form action="/save_config" method="POST" class="space-y-6">
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                <input type="email" id="email" name="email" required
+                       class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                       placeholder="your.email@example.com">
+            </div>
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Email Password (App-Specific recommended)</label>
+                <input type="password" id="password" name="password" required
+                       class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                       placeholder="**********">
+                <p class="mt-1 text-xs text-gray-500">For security, consider using an app-specific password if your provider supports it (e.g., Gmail, Outlook).</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="smtp_server" class="block text-sm font-medium text-gray-700 mb-1">SMTP Server (Outgoing)</label>
+                    <input type="text" id="smtp_server" name="smtp_server" required
+                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                           placeholder="smtp.example.com">
+                </div>
+                <div>
+                    <label for="smtp_port" class="block text-sm font-medium text-gray-700 mb-1">SMTP Port</label>
+                    <input type="number" id="smtp_port" name="smtp_port" required value="465"
+                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="imap_server" class="block text-sm font-medium text-gray-700 mb-1">IMAP Server (Incoming)</label>
+                    <input type="text" id="imap_server" name="imap_server" required
+                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                           placeholder="imap.example.com">
+                </div>
+                <div>
+                    <label for="imap_port" class="block text-sm font-medium text-gray-700 mb-1">IMAP Port</label>
+                    <input type="number" id="imap_port" name="imap_port" required value="993"
+                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+            </div>
+            <div>
+                <button type="submit"
+                        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-bold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
+                    Save Configuration & Log In
+                </button>
+            </div>
+        </form>
+        <p class="mt-8 text-center text-gray-500 text-sm">
+            Common settings:
+            <br>
+            <strong>Gmail:</strong> SMTP: smtp.gmail.com (465 or 587 with TLS), IMAP: imap.gmail.com (993)
+            <br>
+            <strong>Outlook/Hotmail:</strong> SMTP: smtp.office365.com (587 or 465), IMAP: outlook.office365.com (993)
+        </p>
+        <p class="mt-4 text-center text-sm text-red-500">
+            <strong>Warning:</strong> For simplicity, this demo stores your password directly in a local database.
+            In a real application, passwords should always be hashed and encrypted.
+        </p>
+    </div>
+</body>
+</html>
