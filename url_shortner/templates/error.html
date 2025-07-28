@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Not Found</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom CSS for body background and font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); /* Different gradient for error */
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="bg-white p-8 rounded-lg shadow-2xl max-w-sm w-full text-center">
+        <h1 class="text-4xl font-bold text-red-600 mb-4">Oops!</h1>
+        <p class="text-gray-700 text-lg mb-6">The URL you're looking for doesn't exist or has expired.</p>
+        <a href="/"
+           class="inline-block bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50">
+            Go to Homepage
+        </a>
+    </div>
+</body>
+</html>

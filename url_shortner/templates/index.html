@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shorty URL</title>
+    <!-- Tailwind CSS CDN for easy styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font: Inter for a modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom CSS for body background and font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Gradient background */
+            min-height: 100vh; /* Full viewport height */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem; /* Padding for small screens */
+        }
+        /* Custom styling for the message box */
+        .message-box {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            background-color: #10B981; /* Green-500 */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            z-index: 1000;
+        }
+        .message-box.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="bg-white p-8 rounded-lg shadow-2xl max-w-md w-full text-center transform transition duration-500 hover:scale-105">
+        <h1 class="text-4xl font-bold text-gray-800 mb-6">Shorty URL</h1>
+        <p class="text-gray-600 mb-8">Quickly shorten your long URLs into shareable links!</p>
+
+        <form action="/shorten" method="post" class="space-y-6">
+            <input type="url" name="long_url" placeholder="Enter your long URL here" required
+                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-lg transition duration-300">
+            <button type="submit"
+                    class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50">
+                Shorten URL
+            </button>
+        </form>
+
+        <!-- Display the shortened URL if available -->
+        {% if short_url %}
+        <div class="mt-8 p-4 bg-purple-50 rounded-lg border border-purple-200 shadow-inner">
+            <p class="text-purple-700 font-semibold mb-2">Your Shortened URL:</p>
+            <a href="{{ short_url }}" target="_blank" id="shortUrlLink"
+               class="text-purple-600 hover:text-purple-800 break-words underline font-medium text-lg transition duration-300">
+                {{ short_url }}
+            </a>
+            <button onclick="copyToClipboard()"
+                    class="mt-4 bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-lg text-sm transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-opacity-50">
+                Copy
+            </button>
+        </div>
+        {% endif %}
+
+        <p class="text-gray-500 text-sm mt-8">
+            Created by Your AI Assistant.
+        </p>
+    </div>
+
+    <script>
+        function copyToClipboard() {
+            const shortUrlLink = document.getElementById('shortUrlLink');
+            const textToCopy = shortUrlLink.href;
+
+            // Create a temporary textarea element to hold the text to be copied
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = textToCopy;
+            document.body.appendChild(tempTextArea);
+
+            // Select the text in the temporary textarea
+            tempTextArea.select();
+            // Copy the selected text to the clipboard
+            // document.execCommand('copy') is used for broader compatibility in various environments like iframes
+            document.execCommand('copy');
+
+            // Remove the temporary textarea from the DOM
+            document.body.removeChild(tempTextArea);
+
+            // Display a custom message box to indicate success
+            const messageBox = document.createElement('div');
+            messageBox.textContent = 'Short URL copied to clipboard!';
+            messageBox.className = 'message-box'; // Apply the custom message box class
+            document.body.appendChild(messageBox);
+
+            // Show the message box with a slight delay for animation
+            setTimeout(() => {
+                messageBox.classList.add('show');
+            }, 50);
+
+            // Hide and remove the message box after 2 seconds
+            setTimeout(() => {
+                messageBox.classList.remove('show');
+                // Remove the element from DOM after transition ends
+                messageBox.addEventListener('transitionend', () => messageBox.remove(), {once: true});
+            }, 2000); // Message displays for 2 seconds
+        }
+    </script>
+</body>
+</html>
