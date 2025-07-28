@@ -1,0 +1,186 @@
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+    color: #333; /* Default text color for light parts */
+    overflow: hidden; /* Prevent scrollbars */
+    position: relative; /* For abstract background positioning */
+    background: #e0e0e0; /* A light base */
+}
+
+/* Abstract Background - Lighter elements */
+.abstract-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at top left, rgba(200, 200, 255, 0.3) 0%, transparent 40%),
+                radial-gradient(circle at bottom right, rgba(255, 200, 200, 0.3) 0%, transparent 40%),
+                linear-gradient(45deg, rgba(230, 230, 250, 0.8), rgba(250, 230, 250, 0.8));
+    /* Subtle geometric pattern */
+    background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%239C92AC" fill-opacity="0.1"%3E%3Cpath d="M36 34.225V42h-8V34.225zM18 16.225V24h-8V16.225zM42 0v8h-8V0zm-6 18v8h-8v-8zm18-18v8h-8V0zm-6 18v8h-8v-8zm-6 18v8h-8v-8zm-6-18v8h-8v-8zm-6 18v8h-8v-8zM0 36v8h-8v-8zM42 36v8h-8v-8zM24 36v8h-8v-8zm-6-18v8h-8v-8zm-6 18v8h-8v-8zm-6-18v8h-8v-8zM0 0v8h-8V0zm6 18v8h-8v-8zm6 18v8h-8v-8zm6-18v8h-8v-8zm6 18v8h-8v-8zm6-18v8h-8v-8zM0 18v8h-8v-8zm6 18v8h-8v-8zm12-18v8h-8v-8zm-6 18v8h-8v-8zm-6-18v8h-8v-8zm-6 18v8h-8v-8zM0 0v8h-8V0zm42 0v8h-8V0zm-6 18v8h-8v-8z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+    background-size: 60px 60px, cover, cover; /* Adjust pattern size */
+    opacity: 0.7;
+    z-index: -1;
+}
+
+.calculator-container {
+    background: rgba(40, 40, 60, 0.9); /* Darker, semi-transparent body */
+    border-radius: 25px; /* Rounded corners */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 40px rgba(70, 70, 90, 0.3) inset; /* Soft, deep shadow */
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    width: 320px; /* Square-like shape width */
+    height: 480px; /* Square-like shape height */
+    max-width: 90vw; /* Responsive on smaller screens */
+    max-height: 90vh;
+    position: relative;
+    overflow: hidden;
+    animation: scale-in 0.8s ease-out forwards;
+    border: 1px solid rgba(80, 80, 100, 0.5); /* Subtle border */
+}
+
+@keyframes scale-in {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.display-container {
+    background: #222; /* Darker display background */
+    border-radius: 12px;
+    padding: 15px 20px;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6); /* Inner shadow for depth */
+    border: 1px solid rgba(100, 100, 120, 0.2);
+}
+
+.history {
+    color: rgba(180, 180, 200, 0.6); /* Lighter, subtle history text */
+    font-size: 0.85em;
+    min-height: 1.2em;
+    word-wrap: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 300;
+}
+
+.display {
+    color: #f0f0f0; /* Light text for main display */
+    font-size: 2.5em;
+    font-weight: 600;
+    letter-spacing: -0.02em; /* Slightly tighter letter spacing */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-height: 1.5em;
+    display: flex; /* Align text to bottom right */
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px; /* Smaller gap between buttons */
+}
+
+.btn {
+    background: linear-gradient(145deg, #444455, #333344); /* Dark number buttons */
+    border: none;
+    border-radius: 12px; /* Slightly less rounded than container */
+    color: #e0e0e0;
+    font-size: 1.3em;
+    padding: 18px 0;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.3), -4px -4px 8px rgba(70,70,90,0.2); /* Soft neumorphism */
+}
+
+.btn:hover {
+    background: linear-gradient(145deg, #555566, #444455);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.4), 0 0 20px rgba(90,90,110,0.3);
+}
+
+.btn:active {
+    background: linear-gradient(145deg, #333344, #444455);
+    transform: translateY(0);
+    box-shadow: inset 3px 3px 6px rgba(0,0,0,0.5), inset -3px -3px 6px rgba(70,70,90,0.4);
+}
+
+/* Operator Buttons - Accent color */
+.op-btn {
+    background: linear-gradient(145deg, #a050ff, #8000ff); /* Purple accent */
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.3), -4px -4px 8px rgba(128,0,255,0.2);
+}
+
+.op-btn:hover {
+    background: linear-gradient(145deg, #b060ff, #9010ff);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.4), 0 0 20px rgba(128,0,255,0.4);
+}
+
+/* Function Buttons (C, DEL) - Secondary accent */
+.func-btn {
+    background: linear-gradient(145deg, #ff8800, #cc6600); /* Orange accent */
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.3), -4px -4px 8px rgba(204,102,0,0.2);
+}
+
+.func-btn:hover {
+    background: linear-gradient(145deg, #ff9911, #dd7700);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.4), 0 0 20px rgba(204,102,0,0.4);
+}
+
+/* Equals Button - Prominent accent */
+.eq-btn {
+    background: linear-gradient(145deg, #00c080, #00a060); /* Green accent */
+    grid-column: span 2;
+    font-size: 1.8em;
+    font-weight: 700;
+    color: #fff;
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.3), -4px -4px 8px rgba(0,160,96,0.2);
+}
+
+.eq-btn:hover {
+    background: linear-gradient(145deg, #00d090, #00b070);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.4), 0 0 20px rgba(0,160,96,0.4);
+}
+
+.zero-btn {
+    grid-column: span 2;
+}
+
+/* Responsive adjustments */
+@media (max-width: 450px) {
+    .calculator-container {
+        width: 95vw;
+        height: auto; /* Let height adjust naturally */
+        padding: 20px;
+        gap: 15px;
+    }
+    .display {
+        font-size: 2em;
+    }
+    .btn {
+        font-size: 1.1em;
+        padding: 15px 0;
+    }
+    .eq-btn {
+        font-size: 1.5em;
+    }
+}

@@ -1,0 +1,414 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stylish Calculator</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+            background-color: #f8f8f8; /* Very light gray background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 1rem; /* Add some padding for smaller screens */
+        }
+        .calculator {
+            background-color: #ffffff;
+            border-radius: 2rem; /* Even more rounded corners */
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 10px 10px -5px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            width: 100%;
+            max-width: 380px; /* Slightly wider for a better feel */
+            padding: 1.75rem; /* Increased padding */
+            border: 1px solid #e0e0e0; /* Subtle border */
+        }
+        .display-container {
+            background-color: #1a202c; /* Dark charcoal for the entire display area */
+            border-radius: 1rem; /* Rounded display container corners */
+            margin-bottom: 1.5rem;
+            padding: 1rem 1.25rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: space-around; /* Space out the two display lines */
+            height: 120px; /* Taller display to accommodate operation */
+            overflow: hidden; /* Still hide overall overflow */
+        }
+        .operation-display {
+            color: #a0aec0; /* Lighter gray for operation history */
+            font-size: 1.4rem; /* Smaller font for operation history */
+            text-align: right;
+            word-break: break-all;
+            flex-grow: 1; /* Allows it to take available space */
+            line-height: 1.2;
+            padding-bottom: 0.5rem;
+            /* Removed overflow-x and white-space properties */
+        }
+        .display {
+            color: #ffffff;
+            font-size: 3.2rem; /* Larger font for current result */
+            text-align: right;
+            word-break: break-all;
+            flex-shrink: 0; /* Prevent shrinking */
+            line-height: 1;
+            /* Removed overflow-x and white-space properties */
+        }
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.85rem; /* Slightly larger gap */
+        }
+        .btn {
+            background-color: #f7fafc; /* Very light gray button background */
+            color: #2d3748; /* Dark text on buttons */
+            font-size: 1.7rem; /* Even larger button text */
+            padding: 1.2rem; /* More padding for bigger buttons */
+            border-radius: 1rem; /* More rounded button corners */
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600; /* Bolder text */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06); /* Subtle button shadow */
+        }
+        .btn:hover {
+            background-color: #edf2f7; /* Slightly darker on hover */
+            transform: translateY(-3px); /* More pronounced lift effect */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn:active {
+            transform: translateY(0);
+            background-color: #e2e8f0;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08) inset; /* Inset shadow for pressed effect */
+        }
+        .btn.operator {
+            background-color: #63b3ed; /* Blue for operators */
+            color: #ffffff;
+            font-weight: 700;
+        }
+        .btn.operator:hover {
+            background-color: #4299e1;
+        }
+        .btn.equals {
+            background-color: #48bb78; /* Green for equals */
+            color: #ffffff;
+            grid-column: span 2; /* Span two columns */
+            font-weight: 700;
+        }
+        .btn.equals:hover {
+            background-color: #38a169;
+        }
+        .btn.clear {
+            background-color: #fc8181; /* Red for clear */
+            color: #ffffff;
+            font-weight: 700;
+        }
+        .btn.clear:hover {
+            background-color: #e53e3e;
+        }
+        @media (max-width: 420px) {
+            .calculator {
+                padding: 1rem;
+                border-radius: 1.5rem;
+            }
+            .btn {
+                font-size: 1.4rem;
+                padding: 1rem;
+                border-radius: 0.8rem;
+            }
+            .display {
+                font-size: 2.5rem;
+            }
+            .operation-display {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="display-container">
+            <div id="operation-display" class="operation-display"></div>
+            <div id="display" class="display">0</div>
+        </div>
+        <div class="buttons-grid">
+            <button class="btn clear" data-value="C">C</button>
+            <button class="btn operator" data-value="DEL">DEL</button>
+            <button class="btn operator" data-value="/">/</button>
+            <button class="btn operator" data-value="*">*</button>
+
+            <button class="btn" data-value="7">7</button>
+            <button class="btn" data-value="8">8</button>
+            <button class="btn" data-value="9">9</button>
+            <button class="btn operator" data-value="-">-</button>
+
+            <button class="btn" data-value="4">4</button>
+            <button class="btn" data-value="5">5</button>
+            <button class="btn" data-value="6">6</button>
+            <button class="btn operator" data-value="+">+</button>
+
+            <button class="btn" data-value="1">1</button>
+            <button class="btn" data-value="2">2</button>
+            <button class="btn" data-value="3">3</button>
+            <button class="btn equals" data-value="=">=</button>
+
+            <button class="btn" data-value="0">0</button>
+            <button class="btn" data-value=".">.</button>
+        </div>
+    </div>
+
+    <script>
+        const display = document.getElementById('display');
+        const operationDisplay = document.getElementById('operation-display');
+
+        let currentInput = '0';
+        let operator = null;
+        let firstOperand = null;
+        let waitingForSecondOperand = false;
+        let operationHistory = ''; // To store the full operation string
+
+        function updateDisplays() {
+            display.textContent = currentInput;
+            operationDisplay.textContent = operationHistory;
+
+            // Removed scroll logic since overflow is removed from CSS
+        }
+
+        function clearAll() {
+            currentInput = '0';
+            operator = null;
+            firstOperand = null;
+            waitingForSecondOperand = false;
+            operationHistory = '';
+        }
+
+        function deleteLast() {
+            if (currentInput === 'Error') {
+                clearAll();
+            } else if (!waitingForSecondOperand && currentInput.length > 1) {
+                currentInput = currentInput.slice(0, -1);
+            } else if (!waitingForSecondOperand && currentInput.length === 1 && currentInput !== '0') {
+                currentInput = '0';
+            } else if (waitingForSecondOperand && operator && operationHistory.endsWith(operator)) {
+                // If we're waiting for second operand and the last thing was an operator
+                // remove the operator and go back to editing the first operand
+                currentInput = String(firstOperand);
+                operator = null;
+                waitingForSecondOperand = false;
+                operationHistory = String(firstOperand);
+            }
+            // If currentInput is '0' and DEL is pressed, do nothing.
+        }
+
+
+        function inputDigit(digit) {
+            if (currentInput === 'Error') {
+                clearAll(); // Reset if an error occurred
+            }
+
+            if (waitingForSecondOperand) {
+                currentInput = digit;
+                waitingForSecondOperand = false;
+            } else {
+                currentInput = currentInput === '0' ? digit : currentInput + digit;
+            }
+            updateOperationHistory();
+        }
+
+        function inputDecimal(dot) {
+            if (currentInput === 'Error') {
+                clearAll();
+                currentInput = '0.';
+                updateOperationHistory();
+                return;
+            }
+
+            if (waitingForSecondOperand) {
+                currentInput = '0.';
+                waitingForSecondOperand = false;
+                updateOperationHistory();
+                return;
+            }
+            if (!currentInput.includes(dot)) {
+                currentInput += dot;
+            }
+            updateOperationHistory();
+        }
+
+        function updateOperationHistory() {
+            if (firstOperand === null) {
+                operationHistory = currentInput;
+            } else {
+                // If operator is present, show: firstOperand operator currentInput
+                // Otherwise, it's a result or just firstOperand
+                operationHistory = `${firstOperand !== null ? String(firstOperand) : ''} ${operator !== null ? operator : ''} ${currentInput}`;
+                if (operator === null && firstOperand !== null && !waitingForSecondOperand) {
+                    // This case is for displaying the result after '='
+                    operationHistory = String(firstOperand);
+                } else if (operator && waitingForSecondOperand && currentInput !== '0') {
+                    // When an operator is chosen and waiting for the second operand, show first operand and operator
+                     operationHistory = `${String(firstOperand)} ${operator}`;
+                } else if (operator && waitingForSecondOperand && currentInput === '0') {
+                    // When an operator is chosen and waiting for the second operand, show first operand and operator
+                    operationHistory = `${String(firstOperand)} ${operator}`;
+                }
+            }
+        }
+
+
+        function handleOperator(nextOperator) {
+            const inputValue = parseFloat(currentInput);
+
+            if (currentInput === 'Error') {
+                clearAll();
+                return;
+            }
+
+            // If an operator is already selected and we are waiting for the second operand,
+            // pressing another operator simply changes the selected operator
+            if (operator && waitingForSecondOperand) {
+                operator = nextOperator;
+                updateOperationHistory();
+                return;
+            }
+
+            // If firstOperand is null (this is the start of a new calculation or after clear)
+            if (firstOperand === null && !isNaN(inputValue)) {
+                firstOperand = inputValue;
+            } else if (operator) { // If there's a stored operator and firstOperand
+                const result = performCalculation[operator](firstOperand, inputValue);
+
+                if (isNaN(result) || !isFinite(result)) {
+                    currentInput = 'Error'; // Handle division by zero or other invalid operations
+                    firstOperand = null;
+                    operator = null;
+                    waitingForSecondOperand = true;
+                    operationHistory = ''; // Clear history on error
+                    return;
+                }
+
+                currentInput = String(result);
+                firstOperand = result;
+            }
+
+            waitingForSecondOperand = true;
+            operator = nextOperator;
+            updateOperationHistory();
+        }
+
+        const performCalculation = {
+            '/': (firstOperand, secondOperand) => firstOperand / secondOperand,
+            '*': (firstOperand, secondOperand) => firstOperand * secondOperand,
+            '+': (firstOperand, secondOperand) => firstOperand + secondOperand,
+            '-': (firstOperand, secondOperand) => firstOperand - secondOperand,
+            // For equals, we force a calculation with the current state
+            // It's not a direct operation, but triggers the evaluation.
+            '=': (firstOperand, secondOperand) => secondOperand
+        };
+
+        const buttons = document.querySelector('.buttons-grid');
+        buttons.addEventListener('click', (event) => {
+            const { target } = event;
+
+            if (!target.matches('button')) {
+                return;
+            }
+
+            const value = target.dataset.value;
+
+            switch (value) {
+                case '+':
+                case '-':
+                case '*':
+                case '/':
+                    handleOperator(value);
+                    break;
+                case '=':
+                    if (operator && firstOperand !== null) {
+                        const inputValue = parseFloat(currentInput);
+                        const result = performCalculation[operator](firstOperand, inputValue);
+
+                        if (isNaN(result) || !isFinite(result)) {
+                            currentInput = 'Error';
+                            firstOperand = null;
+                            operator = null;
+                            waitingForSecondOperand = true;
+                            operationHistory = '';
+                        } else {
+                            currentInput = String(result);
+                            firstOperand = result; // Store result for chained operations
+                            operator = null; // Clear operator after equals
+                            waitingForSecondOperand = true; // Ready for new input
+                            operationHistory = `${operationHistory} = ${currentInput}`; // Finalize history
+                        }
+                    }
+                    break;
+                case '.':
+                    inputDecimal(value);
+                    break;
+                case 'C':
+                    clearAll();
+                    break;
+                case 'DEL':
+                    deleteLast();
+                    break;
+                default:
+                    // Handle digit inputs
+                    if (Number.isFinite(parseFloat(value))) {
+                        inputDigit(value);
+                    }
+                    break;
+            }
+            updateDisplays();
+        });
+
+        // Basic keyboard support
+        document.addEventListener('keydown', (event) => {
+            const key = event.key;
+
+            if (key >= '0' && key <= '9') {
+                inputDigit(key);
+            } else if (key === '.') {
+                inputDecimal(key);
+            } else if (key === '+' || key === '-' || key === '*' || key === '/') {
+                handleOperator(key);
+            } else if (key === 'Enter' || key === '=') {
+                if (operator && firstOperand !== null) {
+                    const inputValue = parseFloat(currentInput);
+                    const result = performCalculation[operator](firstOperand, inputValue);
+
+                    if (isNaN(result) || !isFinite(result)) {
+                        currentInput = 'Error';
+                        firstOperand = null;
+                        operator = null;
+                        waitingForSecondOperand = true;
+                        operationHistory = '';
+                    } else {
+                        currentInput = String(result);
+                        firstOperand = result;
+                        operator = null;
+                        waitingForSecondOperand = true;
+                        operationHistory = `${operationHistory} = ${currentInput}`;
+                    }
+                }
+            } else if (key === 'Backspace') {
+                deleteLast();
+            } else if (key === 'Escape') {
+                clearAll();
+            }
+            updateDisplays();
+        });
+
+        // Initialize display
+        clearAll(); // Ensure initial state is clean
+        updateDisplays();
+    </script>
+</body>
+</html>
