@@ -175,13 +175,14 @@ Access: [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
 ## 7. Screenshots 📸
 
 
-Example:
 
 * **Calculator App**
   ![Calculator Screenshot](images/calculator.png)
+  
 * **Mail App Inbox**
   ![Mail Screenshot](images/mail_1.png)
   ![Mail Screenshot](images/mail_2.png)
+  
 * **URL Shortener**
   ![Url Screenshot](images/url_1.png)
   ![Url Screenshot](images/url_2.png)
